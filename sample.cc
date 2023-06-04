@@ -1,4 +1,3 @@
-
 int z = 0;
 
 struct A {

@@ -4,6 +4,7 @@ import unittest
 
 clang.cindex.Config.set_library_path("/Library/Developer/CommandLineTools/usr/lib/")
 
+
 class TestCppModel(unittest.TestCase):
     def setUp(self):
         tu = clang.cindex.TranslationUnit.from_source(
@@ -19,7 +20,9 @@ class TestCppModel(unittest.TestCase):
         self.assertEqual(
             str(self.model.functions[0]), "<py_cppmodel.Function double bar(double)>"
         )
-        self.assertEqual(str(self.model.functions[1]), "<py_cppmodel.Function int main()>")
+        self.assertEqual(
+            str(self.model.functions[1]), "<py_cppmodel.Function int main()>"
+        )
 
     def test_classes(self):
         self.assertEqual(len(self.model.classes), 1)
@@ -44,5 +47,12 @@ class TestCppModel(unittest.TestCase):
             str(self.model.classes[0].methods[0]), "<py_cppmodel.Method int foo(int)>"
         )
 
-if __name__ == '__main__':
+        self.assertEqual(len(self.model.unmodelled_nodes), 1)
+        self.assertEqual(
+            str(self.model.unmodelled_nodes[0]),
+            "<py_cppmodel.Unmodelled z <SourceLocation file 'sample.cc', line 1, column 5>>",
+        )
+
+
+if __name__ == "__main__":
     unittest.main()

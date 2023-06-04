@@ -5,6 +5,7 @@ from clang.cindex import Cursor
 from clang.cindex import CursorKind
 from clang.cindex import Diagnostic
 from clang.cindex import ExceptionSpecificationKind
+from clang.cindex import SourceLocation
 from clang.cindex import TranslationUnit
 from clang.cindex import TypeKind
 
@@ -13,6 +14,15 @@ def _get_annotations(node) -> List[str]:
     return [
         c.displayname for c in node.get_children() if c.kind == CursorKind.ANNOTATE_ATTR
     ]
+
+
+class Unmodelled:
+    def __init__(self, cursor: Cursor):
+        self.location: SourceLocation = cursor.location
+        self.name: str = cursor.displayname
+
+    def __repr__(self) -> str:
+        return "<py_cppmodel.Unmodelled {} {}>".format(self.name, self.location)
 
 
 class Type:
@@ -174,6 +184,9 @@ class Model(object):
         self.filename: str = translation_unit.spelling
         self.functions: List[Function] = []
         self.classes: List[Class] = []
+        self.unmodelled_nodes: List[Unmodelled] = []
+        # Keep a reference to the translation unit to prevent it from being garbage collected.
+        self.translation_unit: TranslationUnit = translation_unit 
 
         def is_error_in_current_file(diagnostic: Diagnostic) -> bool:
             if str(diagnostic.location.file) != str(translation_unit.spelling):
@@ -247,6 +260,8 @@ class Model(object):
                 child_namespaces = list(namespaces)
                 child_namespaces.append(c.spelling)
                 self._add_child_nodes(c, child_namespaces)
+            else:
+                self.unmodelled_nodes.append(Unmodelled(c))
 
         # Drop functions and classes with "__" prefixes as they are standard
         # library implementation details.
