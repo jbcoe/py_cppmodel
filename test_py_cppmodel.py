@@ -2,6 +2,7 @@ import clang
 import py_cppmodel
 import unittest
 
+# This is a workaround for the current inability to portably find libclang.
 clang.cindex.Config.set_library_path("/Library/Developer/CommandLineTools/usr/lib/")
 
 
@@ -25,7 +26,7 @@ class TestCppModel(unittest.TestCase):
         )
 
     def test_classes(self):
-        self.assertEqual(len(self.model.classes), 1)
+        self.assertEqual(len(self.model.classes), 2)
         self.assertEqual(str(self.model.classes[0]), "<py_cppmodel.Class A>")
 
         self.assertEqual(len(self.model.classes[0].members), 3)
@@ -47,14 +48,17 @@ class TestCppModel(unittest.TestCase):
             str(self.model.classes[0].methods[0]), "<py_cppmodel.Method int foo(int)>"
         )
 
-        self.assertEqual(len(self.model.unmodelled_nodes), 2)
+        self.assertEqual(str(self.model.classes[1]), "<py_cppmodel.Class B>")
+        self.assertIsInstance(self.model.classes[1], py_cppmodel.ClassTemplate)
+        if isinstance(self.model.classes[1], py_cppmodel.ClassTemplate):
+            self.assertEqual(self.model.classes[1].template_parameter_count, 1)
+
+
+    def test_unmodelled_nodes(self):
+        self.assertEqual(len(self.model.unmodelled_nodes), 1)
         self.assertEqual(
             str(self.model.unmodelled_nodes[0]),
             "<py_cppmodel.Unmodelled z <SourceLocation file 'sample.cc', line 1, column 5>>",
-        )
-        self.assertEqual(
-            str(self.model.unmodelled_nodes[1]),
-            "<py_cppmodel.Unmodelled B<T> <SourceLocation file 'sample.cc', line 12, column 7>>",
         )
 
 
