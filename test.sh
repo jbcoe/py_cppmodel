@@ -4,4 +4,3 @@ set -x
 
 python -m pytype .
 python -m unittest discover .
-

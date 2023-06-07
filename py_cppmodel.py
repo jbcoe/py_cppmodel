@@ -178,15 +178,22 @@ class Class(object):
         return "<py_cppmodel.Class {}>".format(self.name)
 
 
+class ClassTemplate(Class):
+    def __init__(self, cursor: Cursor, namespaces: List[str]):
+        Class.__init__(self, cursor, namespaces)
+        # TODO: replace the count with the actual template args once count works.
+        self.template_parameter_count = cursor.get_num_template_arguments()
+
+
 class Model(object):
     def __init__(self, translation_unit: TranslationUnit):
         """Create a model from a translation unit."""
         self.filename: str = translation_unit.spelling
         self.functions: List[Function] = []
-        self.classes: List[Class] = []
+        self.classes: List[Class|ClassTemplate] = []
         self.unmodelled_nodes: List[Unmodelled] = []
         # Keep a reference to the translation unit to prevent it from being garbage collected.
-        self.translation_unit: TranslationUnit = translation_unit 
+        self.translation_unit: TranslationUnit = translation_unit
 
         def is_error_in_current_file(diagnostic: Diagnostic) -> bool:
             if str(diagnostic.location.file) != str(translation_unit.spelling):
@@ -251,6 +258,8 @@ class Model(object):
         for c in cursor.get_children():
             if c.kind == CursorKind.CLASS_DECL or c.kind == CursorKind.STRUCT_DECL:
                 self.classes.append(Class(c, namespaces))
+            elif c.kind == CursorKind.CLASS_TEMPLATE:
+                self.classes.append(ClassTemplate(c, namespaces))
             elif (
                 c.kind == CursorKind.FUNCTION_DECL
                 and c.type.kind == TypeKind.FUNCTIONPROTO
