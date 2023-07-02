@@ -186,7 +186,7 @@ class Model(object):
         self.classes: List[Class] = []
         self.unmodelled_nodes: List[Unmodelled] = []
         # Keep a reference to the translation unit to prevent it from being garbage collected.
-        self.translation_unit: TranslationUnit = translation_unit 
+        self.translation_unit: TranslationUnit = translation_unit
 
         def is_error_in_current_file(diagnostic: Diagnostic) -> bool:
             if str(diagnostic.location.file) != str(translation_unit.spelling):
@@ -249,25 +249,25 @@ class Model(object):
     def _add_child_nodes(self, cursor: Any, namespaces: List[str] = []):
         namespaces = namespaces or []
         for c in cursor.get_children():
+            try:
+               c.kind
+            except ValueError:  # Handle unknown cursor kind
+               # TODO(jbcoe): Fix cindex.py upstream to avoid needing to do this.
+               continue
             if c.kind == CursorKind.CLASS_DECL or c.kind == CursorKind.STRUCT_DECL:
-                self.classes.append(Class(c, namespaces))
+                if c.location.file.name == self.filename:
+                    self.classes.append(Class(c, namespaces))
             elif (
                 c.kind == CursorKind.FUNCTION_DECL
                 and c.type.kind == TypeKind.FUNCTIONPROTO
             ):
-                self.functions.append(Function(c, namespaces))
+                if c.location.file.name == self.filename:
+                    self.functions.append(Function(c, namespaces))
             elif c.kind == CursorKind.NAMESPACE:
                 child_namespaces = list(namespaces)
                 child_namespaces.append(c.spelling)
+
                 self._add_child_nodes(c, child_namespaces)
             else:
-                self.unmodelled_nodes.append(Unmodelled(c))
-
-        # Drop functions and classes with "__" prefixes as they are standard
-        # library implementation details.
-        self.functions = [f for f in self.functions if not f.name.startswith("__")]
-        self.classes = [
-            c
-            for c in self.classes
-            if not len(c.name) == 0 and not c.name.startswith("__")
-        ]
+                if c.location.file.name == self.filename:
+                    self.unmodelled_nodes.append(Unmodelled(c))

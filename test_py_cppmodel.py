@@ -58,5 +58,40 @@ class TestCppModel(unittest.TestCase):
         )
 
 
+class TestStandardLibraryIncludes(unittest.TestCase):
+    def testVector(self):
+        source = "#include <vector>"
+        tu = clang.cindex.TranslationUnit.from_source(
+            "t.cc",
+            ["-x", "c++", "-std=c++20", "-stdlib=libc++"],
+            unsaved_files=[("t.cc", source)],
+        )
+
+        # This should not raise an exception.
+        self.model = py_cppmodel.Model(tu)
+
+    def testMemory(self):
+        source = "#include <vector>"
+        tu = clang.cindex.TranslationUnit.from_source(
+            "t.cc",
+            ["-x", "c++", "-std=c++20", "-stdlib=libc++"],
+            unsaved_files=[("t.cc", source)],
+        )
+
+        # This should not raise an exception.
+        self.model = py_cppmodel.Model(tu)
+
+    def testString(self):
+        source = "#include <string>"
+        tu = clang.cindex.TranslationUnit.from_source(
+            "t.cc",
+            ["-x", "c++", "-std=c++20", "-stdlib=libc++"],
+            unsaved_files=[("t.cc", source)],
+        )
+
+        # This should not raise an exception.
+        self.model = py_cppmodel.Model(tu)
+
+
 if __name__ == "__main__":
     unittest.main()
