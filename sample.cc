@@ -1,11 +1,11 @@
 int z = 0;
 
-struct A {
+struct __attribute__((annotate("A"))) A {
     int a;
     double b;
     char c[8];
     
-    int foo(int);
+    __attribute__((annotate("foo"))) int foo(int);
 };
 
 template <class T>

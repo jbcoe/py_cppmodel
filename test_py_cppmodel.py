@@ -2,13 +2,24 @@ import clang
 import py_cppmodel
 import unittest
 
-clang.cindex.Config.set_library_path("/Library/Developer/CommandLineTools/usr/lib/")
+clang.cindex.Config.set_library_path("/Library/Developer/CommandLineTools/usr/lib/")  # type: ignore
+
+from clang.cindex import TranslationUnit
+
+COMPILER_ARGS = [
+    "-x",
+    "c++",
+    "-std=c++20",
+    "-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1",
+    "-I/Library/Developer/CommandLineTools/usr/include",
+]
 
 
 class TestCppModel(unittest.TestCase):
     def setUp(self):
-        tu = clang.cindex.TranslationUnit.from_source(
-            "sample.cc", ["-x", "c++", "-std=c++20", "-stdlib=libc++"]
+        tu = TranslationUnit.from_source(
+            "sample.cc",
+            COMPILER_ARGS,
         )
         self.model = py_cppmodel.Model(tu)
 
@@ -28,6 +39,9 @@ class TestCppModel(unittest.TestCase):
         self.assertEqual(len(self.model.classes), 1)
         self.assertEqual(str(self.model.classes[0]), "<py_cppmodel.Class A>")
 
+        self.assertEqual(len(self.model.classes[0].annotations), 1)
+        self.assertEqual(self.model.classes[0].annotations[0], "A")
+
         self.assertEqual(len(self.model.classes[0].members), 3)
         self.assertEqual(
             str(self.model.classes[0].members[0]),
@@ -46,6 +60,8 @@ class TestCppModel(unittest.TestCase):
         self.assertEqual(
             str(self.model.classes[0].methods[0]), "<py_cppmodel.Method int foo(int)>"
         )
+        self.assertEqual(len(self.model.classes[0].methods[0].annotations), 1)
+        self.assertEqual(self.model.classes[0].methods[0].annotations[0], "foo")
 
         self.assertEqual(len(self.model.unmodelled_nodes), 2)
         self.assertEqual(
@@ -61,9 +77,9 @@ class TestCppModel(unittest.TestCase):
 class TestStandardLibraryIncludes(unittest.TestCase):
     def testVector(self):
         source = "#include <vector>"
-        tu = clang.cindex.TranslationUnit.from_source(
+        tu = TranslationUnit.from_source(
             "t.cc",
-            ["-x", "c++", "-std=c++20", "-stdlib=libc++"],
+            COMPILER_ARGS,
             unsaved_files=[("t.cc", source)],
         )
 
@@ -71,10 +87,10 @@ class TestStandardLibraryIncludes(unittest.TestCase):
         self.model = py_cppmodel.Model(tu)
 
     def testMemory(self):
-        source = "#include <vector>"
-        tu = clang.cindex.TranslationUnit.from_source(
+        source = "#include <memory>"
+        tu = TranslationUnit.from_source(
             "t.cc",
-            ["-x", "c++", "-std=c++20", "-stdlib=libc++"],
+            COMPILER_ARGS,
             unsaved_files=[("t.cc", source)],
         )
 
@@ -83,9 +99,9 @@ class TestStandardLibraryIncludes(unittest.TestCase):
 
     def testString(self):
         source = "#include <string>"
-        tu = clang.cindex.TranslationUnit.from_source(
+        tu = TranslationUnit.from_source(
             "t.cc",
-            ["-x", "c++", "-std=c++20", "-stdlib=libc++"],
+            COMPILER_ARGS,
             unsaved_files=[("t.cc", source)],
         )
 
