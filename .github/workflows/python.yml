@@ -1,0 +1,43 @@
+name: Python checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11"]
+        clang: ["18"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Setup Clang
+        uses: egor-tensin/setup-clang@v1
+        with:
+          version: ${{ matrix.clang }}
+          platform: x64
+      - name: Install virtual env and dependencies
+        run: |
+          python -m venv .venv
+          source ./.venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Type checks
+        run: |
+          source ./.venv/bin/activate
+          python -m mypy *.py --check-untyped-defs
+      - name: Tests
+        run: |
+          source ./.venv/bin/activate
+          PY_CPPMODEL_LIBCLANG_PATH=/usr/lib/llvm-18/lib/libclang-18.so.1 \
+          python -m unittest discover --verbose .
