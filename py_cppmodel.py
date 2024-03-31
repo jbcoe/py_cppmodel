@@ -10,9 +10,11 @@ from clang.cindex import TranslationUnit
 from clang.cindex import TypeKind
 
 
-def _get_annotations(node) -> List[str]:
+def _get_annotations(cursor: Cursor) -> List[str]:
     return [
-        c.displayname for c in node.get_children() if c.kind == CursorKind.ANNOTATE_ATTR
+        c.displayname
+        for c in cursor.get_children()
+        if c.kind == CursorKind.ANNOTATE_ATTR
     ]
 
 
@@ -94,10 +96,9 @@ class Function(_Function):
     def __init__(self, cursor, namespaces=[]):
         _Function.__init__(self, cursor)
         self.namespace: str = "::".join(namespaces)
+        self.qualified_name: str = self.name
         if self.namespace:
-            self.qualified_name: str = "::".join([self.namespace, self.name])
-        else:
-            self.qualified_name: str = self.name
+            self.qualified_name = "::".join([self.namespace, self.name])
 
     def __repr__(self) -> str:
         s = _Function.__repr__(self)
@@ -141,10 +142,9 @@ class Class(object):
     def __init__(self, cursor: Cursor, namespaces: List[str]):
         self.name: str = cursor.spelling
         self.namespace: str = "::".join(namespaces)
+        self.qualified_name: str = self.name
         if self.namespace:
-            self.qualified_name: str = "::".join([self.namespace, self.name])
-        else:
-            self.qualified_name: str = self.name
+            self.qualified_name = "::".join([self.namespace, self.name])
         self.constructors: List[Method] = []
         self.methods: List[Method] = []
         self.members: List[Member] = []
@@ -160,17 +160,14 @@ class Class(object):
                 c.kind == CursorKind.CXX_METHOD
                 and c.type.kind == TypeKind.FUNCTIONPROTO
             ):
-                f = Method(c)
-                self.methods.append(f)
+                self.methods.append(Method(c))
             elif (
                 c.kind == CursorKind.CONSTRUCTOR
                 and c.type.kind == TypeKind.FUNCTIONPROTO
             ):
-                f = Method(c)
-                self.constructors.append(f)
+                self.constructors.append(Method(c))
             elif c.kind == CursorKind.FIELD_DECL:
-                f = Member(c)
-                self.members.append(f)
+                self.members.append(Member(c))
             elif c.kind == CursorKind.CXX_BASE_SPECIFIER:
                 self.base_classes.append(c.type.spelling)
 

@@ -1,3 +1,4 @@
 clang==14
+mypy
 pre-commit
 pytype
