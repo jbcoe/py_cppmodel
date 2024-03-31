@@ -30,3 +30,17 @@ source ./.venv/bin/activate     # Activate the virtual env for bash by source.
 mypy *.py --check-untyped-defs  # Run mypy to check type hints.
 unittest discover .             # Run tests.
 ```
+
+## Attribution
+
+We've made considerable use of the following in putting this together:
+
+* <http://szelei.me/code-generator>
+* <http://blog.glehmann.net/2014/12/29/Playing-with-libclang>
+* <http://eli.thegreenplace.net/tag/llvm-clang>
+
+Design of the python bindings is taken from clang's cindex.
+
+* <https://github.com/llvm-mirror/clang/tree/master/bindings/python>
+
+Mistakes are our own.
