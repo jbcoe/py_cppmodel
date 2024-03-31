@@ -40,4 +40,4 @@ jobs:
         run: |
           source ./.venv/bin/activate
           PY_CPPMODEL_LIBCLANG_PATH=/usr/lib/llvm-18/lib/libclang-18.so.1 \
-          python -m unittest discover .
+          python -m unittest discover --verbose .
