@@ -28,7 +28,7 @@ repos:
   - id: requirements-txt-fixer
   - id: trailing-whitespace
 - repo: https://github.com/pre-commit/mirrors-clang-format
-  rev: v17.0.4
+  rev: v18.1.2
   hooks:
   - id: clang-format
     types_or: [c++, c]
@@ -38,7 +38,7 @@ repos:
   - id: dockerfilelint
     stages: [commit]
 - repo: https://github.com/psf/black
-  rev: stable
+  rev: 24.3.0
   hooks:
   - id: black
   - id: black-jupyter
