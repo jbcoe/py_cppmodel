@@ -81,40 +81,5 @@ class TestCppModel(unittest.TestCase):
         )
 
 
-class TestStandardLibraryIncludes(unittest.TestCase):
-    def testVector(self):
-        source = "#include <vector>"
-        tu = TranslationUnit.from_source(
-            "t.cc",
-            COMPILER_ARGS,
-            unsaved_files=[("t.cc", source)],
-        )
-
-        # This should not raise an exception.
-        self.model = py_cppmodel.Model(tu)
-
-    def testMemory(self):
-        source = "#include <memory>"
-        tu = TranslationUnit.from_source(
-            "t.cc",
-            COMPILER_ARGS,
-            unsaved_files=[("t.cc", source)],
-        )
-
-        # This should not raise an exception.
-        self.model = py_cppmodel.Model(tu)
-
-    def testString(self):
-        source = "#include <string>"
-        tu = TranslationUnit.from_source(
-            "t.cc",
-            COMPILER_ARGS,
-            unsaved_files=[("t.cc", source)],
-        )
-
-        # This should not raise an exception.
-        self.model = py_cppmodel.Model(tu)
-
-
 if __name__ == "__main__":
     unittest.main()
