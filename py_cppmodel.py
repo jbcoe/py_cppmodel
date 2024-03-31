@@ -250,10 +250,10 @@ class Model(object):
         namespaces = namespaces or []
         for c in cursor.get_children():
             try:
-               c.kind
+                c.kind
             except ValueError:  # Handle unknown cursor kind
-               # TODO(jbcoe): Fix cindex.py upstream to avoid needing to do this.
-               continue
+                # TODO(jbcoe): Fix cindex.py upstream to avoid needing to do this.
+                continue
             if c.kind == CursorKind.CLASS_DECL or c.kind == CursorKind.STRUCT_DECL:
                 if c.location.file.name == self.filename:
                     self.classes.append(Class(c, namespaces))

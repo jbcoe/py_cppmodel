@@ -2,6 +2,5 @@
 
 set -x
 
-python -m pytype .
-python -m unittest discover .
-
+python3 -m pytype .
+python3 -m unittest discover .
