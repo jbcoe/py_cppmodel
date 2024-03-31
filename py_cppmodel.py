@@ -63,7 +63,7 @@ class FunctionArgument:
         return "<py_cppmodel.FunctionArgument {} {}>".format(self.type, self.name)
 
 
-class _Function(object):
+class _Function:
     def __init__(self, cursor):
         self.name: str = cursor.spelling
         arguments: List[Optional[str]] = [
@@ -138,7 +138,7 @@ class Method(_Function):
         return "<py_cppmodel.Method {}>".format(s)
 
 
-class Class(object):
+class Class:
     def __init__(self, cursor: Cursor, namespaces: List[str]):
         self.name: str = cursor.spelling
         self.namespace: str = "::".join(namespaces)
@@ -175,7 +175,7 @@ class Class(object):
         return "<py_cppmodel.Class {}>".format(self.name)
 
 
-class Model(object):
+class Model:
     def __init__(self, translation_unit: TranslationUnit):
         """Create a model from a translation unit."""
         self.filename: str = translation_unit.spelling
