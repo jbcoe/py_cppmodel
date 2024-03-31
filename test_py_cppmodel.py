@@ -1,8 +1,17 @@
 import clang
+import os
 import py_cppmodel
 import unittest
 
-clang.cindex.Config.set_library_path("/Library/Developer/CommandLineTools/usr/lib/")  # type: ignore
+from ctypes.util import find_library
+
+LIBCLANG_PATH = os.environ.get("PY_CPPMODEL_LIBCLANG_PATH")
+if not LIBCLANG_PATH:
+    LIBCLANG_PATH = find_library("clang")
+    if not LIBCLANG_PATH:
+        raise RuntimeError("PY_CPPMODEL_LIBCLANG_PATH is unset")
+
+clang.cindex.Config.set_library_file(LIBCLANG_PATH)  # type: ignore
 
 from clang.cindex import TranslationUnit
 
