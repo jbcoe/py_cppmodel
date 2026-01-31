@@ -1,0 +1,43 @@
+{
+    "name": "py-cppmodel Dev Container",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "charliermarsh.ruff",
+                "esbenp.prettier-vscode",
+                "github.vscode-pull-request-github",
+                "ms-python.mypy-type-checker",
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-toolsai.jupyter-keymap",
+                "ms-toolsai.jupyter-renderers",
+                "ms-toolsai.jupyter",
+                "ms-toolsai.vscode-jupyter-cell-tags",
+                "ms-toolsai.vscode-jupyter-slideshow",
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/${workspaceFolder}/.venv/bin/python",
+                "[python]": {
+                    "editor.defaultFormatter": "charliermarsh.ruff",
+                    "editor.formatOnSave": true,
+                    "editor.codeActionsOnSave": {
+                        "source.organizeImports": "explicit"
+                    }
+                }
+            }
+        }
+    },
+    "mounts": [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+        "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+    ],
+    "remoteUser": "vscode",
+    "updateRemoteUserUID": true,
+    "remoteEnv": {
+        "UV_LINK_MODE": "copy"
+    }
+}
