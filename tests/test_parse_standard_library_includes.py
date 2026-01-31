@@ -1,7 +1,7 @@
 import pytest
 from clang.cindex import TranslationUnit
 
-import py_cppmodel
+import xyz.cppmodel
 
 COMPILER_ARGS = [
     "-x",
@@ -49,4 +49,4 @@ def test_include(include):
     )
 
     # This should not raise an exception.
-    py_cppmodel.Model(tu)
+    xyz.cppmodel.Model(tu)

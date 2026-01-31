@@ -28,7 +28,7 @@ class Unmodelled:
         self.name: str = cursor.displayname
 
     def __repr__(self) -> str:
-        return "<py_cppmodel.Unmodelled {} {}>".format(self.name, self.location)
+        return "<xyz.cppmodel.Unmodelled {} {}>".format(self.name, self.location)
 
 
 class Type:
@@ -44,7 +44,7 @@ class Type:
             self.pointee = None
 
     def __repr__(self) -> str:
-        return "<py_cppmodel.Type {}>".format(self.name)
+        return "<xyz.cppmodel.Type {}>".format(self.name)
 
 
 class Member:
@@ -53,7 +53,7 @@ class Member:
         self.name: str = cursor.spelling
 
     def __repr__(self) -> str:
-        return "<py_cppmodel.Member {} {}>".format(self.type, self.name)
+        return "<xyz.cppmodel.Member {} {}>".format(self.type, self.name)
 
 
 class FunctionArgument:
@@ -63,8 +63,8 @@ class FunctionArgument:
 
     def __repr__(self) -> str:
         if self.name is None:
-            return "<py_cppmodel.FunctionArgument self.type.name>"
-        return "<py_cppmodel.FunctionArgument {} {}>".format(self.type, self.name)
+            return "<xyz.cppmodel.FunctionArgument self.type.name>"
+        return "<xyz.cppmodel.FunctionArgument {} {}>".format(self.type, self.name)
 
 
 class _Function:
@@ -101,7 +101,7 @@ class Function(_Function):
 
     def __repr__(self) -> str:
         s = _Function.__repr__(self)
-        return "<py_cppmodel.Function {}>".format(s)
+        return "<xyz.cppmodel.Function {}>".format(s)
 
     def __eq__(self, f) -> bool:
         if self.name != f.name:
@@ -132,7 +132,7 @@ class Method(_Function):
             s = "virtual {} = 0".format(s)
         elif self.is_virtual:
             s = "virtual {}".format(s)
-        return "<py_cppmodel.Method {}>".format(s)
+        return "<xyz.cppmodel.Method {}>".format(s)
 
 
 class Class:
@@ -163,7 +163,7 @@ class Class:
                 self.base_classes.append(c.type.spelling)
 
     def __repr__(self) -> str:
-        return "<py_cppmodel.Class {}>".format(self.name)
+        return "<xyz.cppmodel.Class {}>".format(self.name)
 
 
 class Model:
@@ -193,7 +193,7 @@ class Model:
         self._add_child_nodes(translation_unit.cursor, [])
 
     def __repr__(self) -> str:
-        return "<py_cppmodel.Model filename={}, classes={}, functions={}>".format(
+        return "<xyz.cppmodel.Model filename={}, classes={}, functions={}>".format(
             self.filename,
             [c.name for c in self.classes],
             [f.name for f in self.functions],

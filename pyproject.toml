@@ -1,5 +1,5 @@
 [project]
-name = "py-cppmodel"
+name = "xyz-cppmodel"
 version = "0.0.1"
 description = "A Python wrapper around clang's python bindings to generate a simple Python model of a C++ translation unit."
 readme = "README.md"
@@ -31,15 +31,8 @@ addopts = "-n auto -v"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.hatch.build.targets.sdist]
-include = [
-    "py_cppmodel.py",
-    "LICENSE",
-    "README.md",
-]
-
 [tool.hatch.build.targets.wheel]
-include = ["py_cppmodel.py"]
+packages = ["src/xyz"]
 
 [tool.ruff]
 line-length = 120

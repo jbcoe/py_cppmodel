@@ -1,7 +1,7 @@
 import pytest
 from clang.cindex import TranslationUnit
 
-import py_cppmodel
+import xyz.cppmodel
 
 COMPILER_ARGS = [
     "-x",
@@ -41,7 +41,7 @@ def model():
         COMPILER_ARGS,
         unsaved_files=[("sample.cc", SOURCE)],
     )
-    return py_cppmodel.Model(tu)
+    return xyz.cppmodel.Model(tu)
 
 
 def test_filename(model):
@@ -50,13 +50,13 @@ def test_filename(model):
 
 def test_functions(model):
     assert len(model.functions) == 2
-    assert str(model.functions[0]) == "<py_cppmodel.Function double bar(double)>"
-    assert str(model.functions[1]) == "<py_cppmodel.Function int main()>"
+    assert str(model.functions[0]) == "<xyz.cppmodel.Function double bar(double)>"
+    assert str(model.functions[1]) == "<xyz.cppmodel.Function int main()>"
 
 
 def test_classes(model):
     assert len(model.classes) == 1
-    assert str(model.classes[0]) == "<py_cppmodel.Class A>"
+    assert str(model.classes[0]) == "<xyz.cppmodel.Class A>"
 
     assert len(model.classes[0].annotations) == 1
     assert model.classes[0].annotations[0] == "A"
@@ -64,12 +64,12 @@ def test_classes(model):
 
 def test_class_members(model):
     assert len(model.classes[0].members) == 3
-    assert str(model.classes[0].members[0]) == "<py_cppmodel.Member <py_cppmodel.Type int> a>"
-    assert str(model.classes[0].members[1]) == "<py_cppmodel.Member <py_cppmodel.Type double> b>"
-    assert str(model.classes[0].members[2]) == "<py_cppmodel.Member <py_cppmodel.Type char[8]> c>"
+    assert str(model.classes[0].members[0]) == "<xyz.cppmodel.Member <xyz.cppmodel.Type int> a>"
+    assert str(model.classes[0].members[1]) == "<xyz.cppmodel.Member <xyz.cppmodel.Type double> b>"
+    assert str(model.classes[0].members[2]) == "<xyz.cppmodel.Member <xyz.cppmodel.Type char[8]> c>"
 
     assert len(model.classes[0].methods) == 1
-    assert str(model.classes[0].methods[0]) == "<py_cppmodel.Method int foo(int)>"
+    assert str(model.classes[0].methods[0]) == "<xyz.cppmodel.Method int foo(int)>"
     assert len(model.classes[0].methods[0].annotations) == 1
     assert model.classes[0].methods[0].annotations[0] == "foo"
 
@@ -78,9 +78,9 @@ def test_unmodelled_nodes(model):
     assert len(model.unmodelled_nodes) == 2
     assert (
         str(model.unmodelled_nodes[0])
-        == "<py_cppmodel.Unmodelled z <SourceLocation file 'sample.cc', line 1, column 5>>"
+        == "<xyz.cppmodel.Unmodelled z <SourceLocation file 'sample.cc', line 1, column 5>>"
     )
     assert (
         str(model.unmodelled_nodes[1])
-        == "<py_cppmodel.Unmodelled B<T> <SourceLocation file 'sample.cc', line 12, column 7>>"
+        == "<xyz.cppmodel.Unmodelled B<T> <SourceLocation file 'sample.cc', line 12, column 7>>"
     )
