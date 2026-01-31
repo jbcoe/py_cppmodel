@@ -30,7 +30,7 @@ uv sync
 To run the tests, run:
 
 ```sh
-uv run python -m unittest discover .
+./test.macos.sh
 ```
 
 To run type checking:
