@@ -3,8 +3,7 @@ revision = 3
 requires-python = ">=3.10"
 resolution-markers = [
     "python_full_version >= '3.14'",
-    "python_full_version == '3.13.*'",
-    "python_full_version >= '3.11' and python_full_version < '3.13'",
+    "python_full_version >= '3.11' and python_full_version < '3.14'",
     "python_full_version < '3.11'",
 ]
 
@@ -352,11 +351,11 @@ wheels = [
 
 [[package]]
 name = "clang"
-version = "14.0"
+version = "21.1.7"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/5b/1f/0cde370a9b3f51d8aee106c50d0acf84f088de0d8c99e65b924443314c13/clang-14.0.tar.gz", hash = "sha256:0fe241386d3b780666e032d8c2e482b1d434880185c685071aa38b78317e969f", size = 31219, upload-time = "2022-02-12T17:56:59.807Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/50/9b/956a03195656847c4e3620dab9c36c9e53aecf685a6c3f0bc1ce025d7ec3/clang-21.1.7.tar.gz", hash = "sha256:01d5602b3fff77fef6d691a193d7aead4766b0f11d789d596200f3334a88f4b8", size = 8600, upload-time = "2025-12-18T22:04:51.886Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/08/ae/4c5e775b3bafc86fde8db6e4f3fed014651312f33b5fd0468e4bf6848187/clang-14.0-py3-none-any.whl", hash = "sha256:049c7f7740f46f733fc96b5395910ffc57f56d4d61bca65b5556e9772d146deb", size = 31266, upload-time = "2022-02-12T17:56:58.082Z" },
+    { url = "https://files.pythonhosted.org/packages/50/a4/608c542925949b300a295baa422b568f835044c5e3ad20820676b840228a/clang-21.1.7-py3-none-any.whl", hash = "sha256:23ee8f7b62af648009aee5139516b2a2a9320680dbce6e42a53e48bd5e8983ea", size = 40240, upload-time = "2025-12-18T22:04:50.636Z" },
 ]
 
 [[package]]
@@ -610,8 +609,7 @@ version = "9.9.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version >= '3.14'",
-    "python_full_version == '3.13.*'",
-    "python_full_version >= '3.11' and python_full_version < '3.13'",
+    "python_full_version >= '3.11' and python_full_version < '3.14'",
 ]
 dependencies = [
     { name = "colorama", marker = "python_full_version >= '3.11' and sys_platform == 'win32'" },
@@ -1341,45 +1339,6 @@ wheels = [
 ]
 
 [[package]]
-<<<<<<< HEAD
-=======
-name = "py-cppmodel"
-version = "0.0.1"
-source = { editable = "." }
-dependencies = [
-    { name = "clang" },
-    { name = "libclang" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "ipython", version = "8.38.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "ipython", version = "9.9.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
-    { name = "jupyter" },
-    { name = "pre-commit" },
-    { name = "pytest" },
-    { name = "pytest-xdist" },
-    { name = "ty" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "clang", specifier = ">=14.0" },
-    { name = "libclang", specifier = ">=18.1.1" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "ipython", specifier = ">=8.12.3" },
-    { name = "jupyter", specifier = ">=1.1.1" },
-    { name = "pre-commit", specifier = ">=4.5.1" },
-    { name = "pytest", specifier = ">=9.0.2" },
-    { name = "pytest-xdist", specifier = ">=3.8.0" },
-    { name = "ty", specifier = ">=0.0.14" },
-]
-
-[[package]]
->>>>>>> origin/main
 name = "pycparser"
 version = "3.0"
 source = { registry = "https://pypi.org/simple" }
