@@ -31,4 +31,4 @@ jobs:
       - name: Type checks
         run: uv run ty check .
       - name: Tests
-        run: uv run python -m unittest discover --verbose .
+        run: uv run pytest

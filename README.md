@@ -25,7 +25,7 @@ uv sync
 To run the tests, run:
 
 ```sh
-uv run python -m unittest discover --verbose .
+uv run pytest
 ```
 
 To run type checking:
