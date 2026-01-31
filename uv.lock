@@ -1679,6 +1679,7 @@ dev = [
     { name = "ipython", version = "8.38.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "ipython", version = "9.9.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "jupyter" },
+    { name = "mypy" },
     { name = "parameterized" },
     { name = "pre-commit" },
     { name = "pytest" },
@@ -1698,6 +1699,7 @@ provides-extras = ["dev"]
 dev = [
     { name = "ipython", specifier = ">=8.12.3" },
     { name = "jupyter", specifier = ">=1.1.1" },
+    { name = "mypy", specifier = ">=1.19.1" },
     { name = "parameterized", specifier = ">=0.9.0" },
     { name = "pre-commit", specifier = ">=4.5.1" },
     { name = "pytest", specifier = ">=8.3.5" },
