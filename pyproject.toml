@@ -66,9 +66,3 @@ force-single-line = true
 
 [tool.ruff.format]
 quote-style = "double"
-
-[[tool.ty.overrides]]
-include = ["py_cppmodel.py"]
-
-[tool.ty.overrides.rules]
-unresolved-attribute = "ignore"

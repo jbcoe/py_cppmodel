@@ -2,14 +2,20 @@ from typing import Any
 from typing import List
 from typing import Optional
 
-from clang.cindex import AccessSpecifier
+from clang.cindex import AccessSpecifier as _AccessSpecifier
 from clang.cindex import Cursor
-from clang.cindex import CursorKind
+from clang.cindex import CursorKind as _CursorKind
 from clang.cindex import Diagnostic
-from clang.cindex import ExceptionSpecificationKind
+from clang.cindex import ExceptionSpecificationKind as _ExceptionSpecificationKind
 from clang.cindex import SourceLocation
 from clang.cindex import TranslationUnit
-from clang.cindex import TypeKind
+from clang.cindex import TypeKind as _TypeKind
+
+# Suppress type checking warnings for clang.cindex kinds.
+AccessSpecifier: Any = _AccessSpecifier
+CursorKind: Any = _CursorKind
+ExceptionSpecificationKind: Any = _ExceptionSpecificationKind
+TypeKind: Any = _TypeKind
 
 
 def _get_annotations(cursor: Cursor) -> List[str]:
