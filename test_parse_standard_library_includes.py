@@ -1,7 +1,5 @@
-import unittest
-
+import pytest
 from clang.cindex import TranslationUnit
-from parameterized import parameterized
 
 import py_cppmodel
 
@@ -14,50 +12,41 @@ COMPILER_ARGS = [
 ]
 
 
-def _custom_name_func(testcase_func, _, param):
-    return "%s_%s" % (testcase_func.__name__, parameterized.to_safe_name(param.args[0]))
-
-
-class TestStandardLibraryIncludes(unittest.TestCase):
-    @parameterized.expand(
-        [
-            "algorithm",
-            "any",
-            "array",
-            "deque",
-            "forward_list",
-            "functional",
-            "iterator",
-            "list",
-            "map",
-            "memory",
-            "numeric",
-            "optional",
-            "queue",
-            "set",
-            "stack",
-            "string",
-            "tuple",
-            "type_traits",
-            "unordered_map",
-            "unordered_set",
-            "utility",
-            "variant",
-            "vector",
-        ],
-        name_func=_custom_name_func,
+@pytest.mark.parametrize(
+    "include",
+    [
+        "algorithm",
+        "any",
+        "array",
+        "deque",
+        "forward_list",
+        "functional",
+        "iterator",
+        "list",
+        "map",
+        "memory",
+        "numeric",
+        "optional",
+        "queue",
+        "set",
+        "stack",
+        "string",
+        "tuple",
+        "type_traits",
+        "unordered_map",
+        "unordered_set",
+        "utility",
+        "variant",
+        "vector",
+    ],
+)
+def test_include(include):
+    source = f"#include <{include}>"
+    tu = TranslationUnit.from_source(
+        "t.cc",
+        COMPILER_ARGS,
+        unsaved_files=[("t.cc", source)],
     )
-    def test_include(self, include):
-        source = f"#include <{include}>"
-        tu = TranslationUnit.from_source(
-            "t.cc",
-            COMPILER_ARGS,
-            unsaved_files=[("t.cc", source)],
-        )
 
-        # This should not raise an exception.
-        self.model = py_cppmodel.Model(tu)
-
-
-if __name__ == "__main__":
-    unittest.main()
+    # This should not raise an exception.
+    py_cppmodel.Model(tu)

@@ -7,4 +7,4 @@ uv sync
 uv run ty check .
 
 # Unit tests
-uv run python -m unittest discover --verbose .
+uv run pytest
