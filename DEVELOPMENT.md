@@ -12,5 +12,4 @@ uv sync                         # Install dependencies
 uv run pre-commit install       # Use pre-commit to install git hooks into the working repository.
 ```
 
-pre-commit is configured with .pre-commit-config.yaml which contains some
-additional documentation.
+pre-commit is configured with .pre-commit-config.yaml.
