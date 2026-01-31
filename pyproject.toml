@@ -18,7 +18,6 @@ Repository = "https://github.com/jbcoe/py_cppmodel"
 dev = [
     "ipython>=8.12.3",
     "jupyter>=1.1.1",
-    "parameterized>=0.9.0",
     "pre-commit>=4.5.1",
     "pytest>=9.0.2",
     "pytest-xdist>=3.8.0",
