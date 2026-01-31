@@ -1,21 +1,19 @@
 from typing import Any, List, Optional
 
-from clang.cindex import AccessSpecifier
-from clang.cindex import Cursor
-from clang.cindex import CursorKind
-from clang.cindex import Diagnostic
-from clang.cindex import ExceptionSpecificationKind
-from clang.cindex import SourceLocation
-from clang.cindex import TranslationUnit
-from clang.cindex import TypeKind
+from clang.cindex import (
+    AccessSpecifier,
+    Cursor,
+    CursorKind,
+    Diagnostic,
+    ExceptionSpecificationKind,
+    SourceLocation,
+    TranslationUnit,
+    TypeKind,
+)
 
 
 def _get_annotations(cursor: Cursor) -> List[str]:
-    return [
-        c.displayname
-        for c in cursor.get_children()
-        if c.kind == CursorKind.ANNOTATE_ATTR
-    ]
+    return [c.displayname for c in cursor.get_children() if c.kind == CursorKind.ANNOTATE_ATTR]
 
 
 class Unmodelled:
@@ -66,19 +64,14 @@ class FunctionArgument:
 class _Function:
     def __init__(self, cursor):
         self.name: str = cursor.spelling
-        arguments: List[Optional[str]] = [
-            str(x.spelling) or None for x in cursor.get_arguments()
-        ]
+        arguments: List[Optional[str]] = [str(x.spelling) or None for x in cursor.get_arguments()]
         argument_types: List[Type] = [Type(x) for x in cursor.type.argument_types()]
-        self.is_noexcept: bool = (
-            cursor.exception_specification_kind
-            == ExceptionSpecificationKind.BASIC_NOEXCEPT
-        )
+        self.is_noexcept: bool = cursor.exception_specification_kind == ExceptionSpecificationKind.BASIC_NOEXCEPT
         self.return_type: Type = Type(cursor.type.get_result())
         self.arguments: List[FunctionArgument] = []
         self.annotations: List[str] = _get_annotations(cursor)
 
-        for t, n in zip(argument_types, arguments):
+        for t, n in zip(argument_types, arguments, strict=False):
             self.arguments.append(FunctionArgument(t, n))
 
     def __repr__(self) -> str:
@@ -111,9 +104,7 @@ class Function(_Function):
             return False
         if len(self.arguments) != len(f.arguments):
             return False
-        for x, fx in zip(
-            [arg.type for arg in self.arguments], [arg.type for arg in f.arguments]
-        ):
+        for x, fx in zip([arg.type for arg in self.arguments], [arg.type for arg in f.arguments], strict=False):
             if x.name != fx.name:
                 return False
         return True
@@ -156,15 +147,9 @@ class Class:
         self.source_column = int(cursor.location.column)
 
         for c in cursor.get_children():
-            if (
-                c.kind == CursorKind.CXX_METHOD
-                and c.type.kind == TypeKind.FUNCTIONPROTO
-            ):
+            if c.kind == CursorKind.CXX_METHOD and c.type.kind == TypeKind.FUNCTIONPROTO:
                 self.methods.append(Method(c))
-            elif (
-                c.kind == CursorKind.CONSTRUCTOR
-                and c.type.kind == TypeKind.FUNCTIONPROTO
-            ):
+            elif c.kind == CursorKind.CONSTRUCTOR and c.type.kind == TypeKind.FUNCTIONPROTO:
                 self.constructors.append(Method(c))
             elif c.kind == CursorKind.FIELD_DECL:
                 self.members.append(Member(c))
@@ -194,9 +179,7 @@ class Model:
                 return True
             return False
 
-        errors: List[Diagnostic] = [
-            d for d in translation_unit.diagnostics if is_error_in_current_file(d)
-        ]
+        errors: List[Diagnostic] = [d for d in translation_unit.diagnostics if is_error_in_current_file(d)]
         if errors:
             joined_errors = "\n".join(str(e) for e in errors)
             raise ValueError(f"Errors in source file:{joined_errors}")
@@ -254,10 +237,7 @@ class Model:
             if c.kind == CursorKind.CLASS_DECL or c.kind == CursorKind.STRUCT_DECL:
                 if c.location.file.name == self.filename:
                     self.classes.append(Class(c, namespaces))
-            elif (
-                c.kind == CursorKind.FUNCTION_DECL
-                and c.type.kind == TypeKind.FUNCTIONPROTO
-            ):
+            elif c.kind == CursorKind.FUNCTION_DECL and c.type.kind == TypeKind.FUNCTIONPROTO:
                 if c.location.file.name == self.filename:
                     self.functions.append(Function(c, namespaces))
             elif c.kind == CursorKind.NAMESPACE:

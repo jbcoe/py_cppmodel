@@ -1,9 +1,8 @@
-import clang
-import os
-import py_cppmodel
 import unittest
 
 from clang.cindex import TranslationUnit
+
+import py_cppmodel
 
 COMPILER_ARGS = [
     "-x",
@@ -27,12 +26,8 @@ class TestCppModel(unittest.TestCase):
 
     def test_functions(self):
         self.assertEqual(len(self.model.functions), 2)
-        self.assertEqual(
-            str(self.model.functions[0]), "<py_cppmodel.Function double bar(double)>"
-        )
-        self.assertEqual(
-            str(self.model.functions[1]), "<py_cppmodel.Function int main()>"
-        )
+        self.assertEqual(str(self.model.functions[0]), "<py_cppmodel.Function double bar(double)>")
+        self.assertEqual(str(self.model.functions[1]), "<py_cppmodel.Function int main()>")
 
     def test_classes(self):
         self.assertEqual(len(self.model.classes), 1)
@@ -56,9 +51,7 @@ class TestCppModel(unittest.TestCase):
         )
 
         self.assertEqual(len(self.model.classes[0].methods), 1)
-        self.assertEqual(
-            str(self.model.classes[0].methods[0]), "<py_cppmodel.Method int foo(int)>"
-        )
+        self.assertEqual(str(self.model.classes[0].methods[0]), "<py_cppmodel.Method int foo(int)>")
         self.assertEqual(len(self.model.classes[0].methods[0].annotations), 1)
         self.assertEqual(self.model.classes[0].methods[0].annotations[0], "foo")
 
