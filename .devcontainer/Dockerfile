@@ -1,5 +1,3 @@
-# Use Python:3.12-slim image as the base image as the PyTorch image
-# https://hub.docker.com/r/pytorch/pytorch is too big (>3GB).
 FROM python:3.12-slim
 
 # Install essential packages and create non-root user

@@ -1,5 +1,5 @@
 {
-    "name": "py_cppmodel Dev Container",
+    "name": "py-cppmodel Dev Container",
     "build": {
         "dockerfile": "Dockerfile",
         "context": ".."
