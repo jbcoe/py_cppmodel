@@ -1,15 +1,15 @@
-from typing import Any, List, Optional
+from typing import Any
+from typing import List
+from typing import Optional
 
-from clang.cindex import (
-    AccessSpecifier,
-    Cursor,
-    CursorKind,
-    Diagnostic,
-    ExceptionSpecificationKind,
-    SourceLocation,
-    TranslationUnit,
-    TypeKind,
-)
+from clang.cindex import AccessSpecifier
+from clang.cindex import Cursor
+from clang.cindex import CursorKind
+from clang.cindex import Diagnostic
+from clang.cindex import ExceptionSpecificationKind
+from clang.cindex import SourceLocation
+from clang.cindex import TranslationUnit
+from clang.cindex import TypeKind
 
 
 def _get_annotations(cursor: Cursor) -> List[str]:
