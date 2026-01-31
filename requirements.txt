@@ -1,5 +1,0 @@
-clang==14
-mypy
-parameterized
-pre-commit
-pytype
