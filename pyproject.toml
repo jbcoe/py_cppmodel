@@ -1,0 +1,54 @@
+[project]
+name = "py-cppmodel"
+version = "0.0.1"
+description = "A Python wrapper around clang's python bindings to generate a simple Python model of a C++ translation unit."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "J.B. Coe", email = "jonathanbcoe@gmail.com" }]
+dependencies = [
+    "clang>=14.0",
+]
+
+[project.urls]
+Repository = "https://github.com/jbcoe/py_cppmodel"
+
+[project.optional-dependencies]
+dev = [
+    "mypy",
+    "parameterized",
+    "pre-commit",
+    "pytype",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "py_cppmodel.py",
+    "LICENSE",
+    "README.md",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+exclude = [
+    "*.sh",
+    "*.ipynb",
+    "test_*.py",
+    "requirements.txt",
+    "mypy.ini",
+    "Sandbox.ipynb",
+    ".github",
+]
+
+[dependency-groups]
+dev = [
+    "ipython>=8.12.3",
+    "jupyter>=1.1.1",
+    "parameterized>=0.9.0",
+    "pre-commit>=4.5.1",
+    "pytest>=8.3.5",
+]
