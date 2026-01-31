@@ -8,6 +8,7 @@ license = { file = "LICENSE" }
 authors = [{ name = "J.B. Coe", email = "jonathanbcoe@gmail.com" }]
 dependencies = [
     "clang>=14.0",
+    "libclang>=18.1.1",
 ]
 
 [project.urls]

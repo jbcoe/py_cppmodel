@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -34,6 +33,4 @@ jobs:
       - name: Type checks
         run: uv run mypy *.py --check-untyped-defs
       - name: Tests
-        run: |
-          PY_CPPMODEL_LIBCLANG_PATH=/usr/lib/llvm-18/lib/libclang-18.so.1 \
-          uv run python -m unittest discover --verbose .
+        run: uv run python -m unittest discover --verbose .

@@ -14,11 +14,6 @@
 `py_cppmodel` is a Python wrapper around clang's python bindings to generate a
 simple Python model of a C++ translation unit.
 
-## Limitations
-
-Currently the environment variable `PY_CPPMODEL_LIBCLANG_PATH` must be defined
-to specify where libclang can be found. This may be fixed in the future.
-
 ## Development
 
 To set up the development environment, execute the following commands:
@@ -30,7 +25,7 @@ uv sync
 To run the tests, run:
 
 ```sh
-./test.macos.sh
+uv run python -m unittest discover --verbose .
 ```
 
 To run type checking:
