@@ -4,7 +4,7 @@
 uv sync
 
 # Type checks
-uv run mypy *.py --check-untyped-defs
+uv run ty check .
 
 # Unit tests
 uv run python -m unittest discover --verbose .
