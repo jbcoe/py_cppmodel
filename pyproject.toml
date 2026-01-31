@@ -36,3 +36,29 @@ include = [
 
 [tool.hatch.build.targets.wheel]
 include = ["py_cppmodel.py"]
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+# https://docs.astral.sh/ruff/rules/
+select = [
+    "B",      # Bugbear
+    "E",      # Pycodestyle
+    "F",      # Pyflakes
+    "I",      # Isort
+    "W",      # Pycodestyle
+]
+ignore = [
+    "B006", # Do not use mutable data structures for argument defaults TODO: Fix this.
+    "B018", # Found useless expression. Either assign it to a variable or remove it. TODO: Fix this.
+]
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.isort]
+force-single-line = true
+
+[tool.ruff.format]
+quote-style = "double"

@@ -1,12 +1,9 @@
-import clang
-import os
-import py_cppmodel
 import unittest
-from parameterized import parameterized
-
-from ctypes.util import find_library
 
 from clang.cindex import TranslationUnit
+from parameterized import parameterized
+
+import py_cppmodel
 
 COMPILER_ARGS = [
     "-x",
