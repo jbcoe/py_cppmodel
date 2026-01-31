@@ -21,6 +21,7 @@ dev = [
     "pre-commit>=4.5.1",
     "pytest>=9.0.2",
     "pytest-xdist>=3.8.0",
+    "ruff>=0.14.14",
     "ty>=0.0.14",
 ]
 
@@ -46,10 +47,6 @@ select = [
     "F",      # Pyflakes
     "I",      # Isort
     "W",      # Pycodestyle
-]
-ignore = [
-    "B006", # Do not use mutable data structures for argument defaults TODO: Fix this.
-    "B018", # Found useless expression. Either assign it to a variable or remove it. TODO: Fix this.
 ]
 fixable = ["ALL"]
 unfixable = []
