@@ -92,7 +92,8 @@ class _Function:
 
 
 class Function(_Function):
-    def __init__(self, cursor, namespaces=[]):
+    def __init__(self, cursor, namespaces: list[str] | None = None):
+        namespaces = namespaces or []
         _Function.__init__(self, cursor)
         self.namespace: str = "::".join(namespaces)
         self.qualified_name: str = self.name
@@ -232,11 +233,11 @@ class Model:
             if is_new:
                 self.functions.append(new_function)
 
-    def _add_child_nodes(self, cursor: Any, namespaces: List[str] = []):
+    def _add_child_nodes(self, cursor: Any, namespaces: List[str] | None = None):
         namespaces = namespaces or []
         for c in cursor.get_children():
             try:
-                c.kind
+                _ = c.kind
             except ValueError:  # Handle unknown cursor kind
                 # TODO(jbcoe): Fix cindex.py upstream to avoid needing to do this.
                 continue
