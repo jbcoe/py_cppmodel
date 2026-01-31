@@ -1341,6 +1341,45 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< HEAD
+=======
+name = "py-cppmodel"
+version = "0.0.1"
+source = { editable = "." }
+dependencies = [
+    { name = "clang" },
+    { name = "libclang" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "ipython", version = "8.38.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "ipython", version = "9.9.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "jupyter" },
+    { name = "pre-commit" },
+    { name = "pytest" },
+    { name = "pytest-xdist" },
+    { name = "ty" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "clang", specifier = ">=14.0" },
+    { name = "libclang", specifier = ">=18.1.1" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "ipython", specifier = ">=8.12.3" },
+    { name = "jupyter", specifier = ">=1.1.1" },
+    { name = "pre-commit", specifier = ">=4.5.1" },
+    { name = "pytest", specifier = ">=9.0.2" },
+    { name = "pytest-xdist", specifier = ">=3.8.0" },
+    { name = "ty", specifier = ">=0.0.14" },
+]
+
+[[package]]
+>>>>>>> origin/main
 name = "pycparser"
 version = "3.0"
 source = { registry = "https://pypi.org/simple" }
