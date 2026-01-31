@@ -18,24 +18,15 @@
                 "ms-toolsai.jupyter",
                 "ms-toolsai.vscode-jupyter-cell-tags",
                 "ms-toolsai.vscode-jupyter-slideshow",
-                "tamasfe.even-better-toml"
             ],
             "settings": {
-                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.defaultInterpreterPath": "/${workspaceFolder}/.venv/bin/python",
                 "[python]": {
                     "editor.defaultFormatter": "charliermarsh.ruff",
                     "editor.formatOnSave": true,
                     "editor.codeActionsOnSave": {
                         "source.organizeImports": "explicit"
                     }
-                },
-                "[toml]": {
-                    "editor.defaultFormatter": "tamasfe.even-better-toml",
-                    "editor.formatOnSave": true
-                },
-                "evenBetterToml.schema.enabled": true,
-                "evenBetterToml.schema.associations": {
-                    "pyproject.toml": "https://json.schemastore.org/pyproject.json"
                 }
             }
         }
