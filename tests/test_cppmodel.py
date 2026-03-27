@@ -20,6 +20,7 @@ struct __attribute__((annotate("A"))) A {
   char c[8];
 
   __attribute__((annotate("foo"))) int foo(int);
+  constexpr int constexpr_method() const;
 };
 
 template <class T>
@@ -29,6 +30,7 @@ class B {
 };
 
 double bar(double);
+constexpr int constexpr_func();
 
 int main() {}
 """
@@ -49,9 +51,10 @@ def test_filename(model):
 
 
 def test_functions(model):
-    assert len(model.functions) == 2
+    assert len(model.functions) == 3
     assert str(model.functions[0]) == "<xyz.cppmodel.Function double bar(double)>"
-    assert str(model.functions[1]) == "<xyz.cppmodel.Function int main()>"
+    assert str(model.functions[1]) == "<xyz.cppmodel.Function constexpr int constexpr_func()>"
+    assert str(model.functions[2]) == "<xyz.cppmodel.Function int main()>"
 
 
 def test_classes(model):
@@ -68,10 +71,11 @@ def test_class_members(model):
     assert str(model.classes[0].members[1]) == "<xyz.cppmodel.Member <xyz.cppmodel.Type double> b>"
     assert str(model.classes[0].members[2]) == "<xyz.cppmodel.Member <xyz.cppmodel.Type char[8]> c>"
 
-    assert len(model.classes[0].methods) == 1
+    assert len(model.classes[0].methods) == 2
     assert str(model.classes[0].methods[0]) == "<xyz.cppmodel.Method int foo(int)>"
     assert len(model.classes[0].methods[0].annotations) == 1
     assert model.classes[0].methods[0].annotations[0] == "foo"
+    assert str(model.classes[0].methods[1]) == "<xyz.cppmodel.Method constexpr int constexpr_method() const>"
 
 
 def test_unmodelled_nodes(model):
