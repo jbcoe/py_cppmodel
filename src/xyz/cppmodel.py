@@ -7,14 +7,11 @@ from clang.cindex import Cursor
 from clang.cindex import CursorKind as _CursorKind
 from clang.cindex import Diagnostic
 from clang.cindex import ExceptionSpecificationKind as _ExceptionSpecificationKind
+from clang.cindex import SourceLocation
 from clang.cindex import TranslationUnit
-from clang.cindex import Type as _ClangType
 from clang.cindex import TypeKind as _TypeKind
 
 # Suppress type checking warnings for clang.cindex kinds.
-from xyz._libclang_mirrors import _CursorMirror
-from xyz._libclang_mirrors import _TypeMirror
-
 AccessSpecifier: Any = _AccessSpecifier
 CursorKind: Any = _CursorKind
 ExceptionSpecificationKind: Any = _ExceptionSpecificationKind
@@ -25,46 +22,35 @@ def _get_annotations(cursor: Cursor) -> List[str]:
     return [c.displayname for c in cursor.get_children() if c.kind == CursorKind.ANNOTATE_ATTR]
 
 
-class Unmodelled(_CursorMirror):
+class Unmodelled:
     def __init__(self, cursor: Cursor):
-        self._cursor = cursor
+        self.location: SourceLocation = cursor.location
         self.name: str = cursor.displayname
 
     def __repr__(self) -> str:
         return "<xyz.cppmodel.Unmodelled {} {}>".format(self.name, self.location)
 
 
-class Type(_TypeMirror):
-    def __init__(self, cindex_type: _ClangType):
-        self._type = cindex_type
+class Type:
+    def __init__(self, cindex_type):
+        self.kind = cindex_type.kind
         self.name = cindex_type.spelling
         self.is_pointer: bool = self.kind == TypeKind.POINTER
         self.is_reference: bool = self.kind == TypeKind.LVALUEREFERENCE
+        self.is_const: bool = cindex_type.is_const_qualified()
         if self.is_pointer or self.is_reference:
             self.pointee: Optional[Type] = Type(cindex_type.get_pointee())
         else:
             self.pointee = None
 
-    @property
-    def is_const(self) -> bool:
-        import warnings
-
-        warnings.warn("is_const is deprecated, use is_const_qualified() instead", DeprecationWarning, stacklevel=2)
-        return self.is_const_qualified()
-
     def __repr__(self) -> str:
         return "<xyz.cppmodel.Type {}>".format(self.name)
 
 
-class Member(_CursorMirror):
+class Member:
     def __init__(self, cursor: Cursor):
-        self._cursor = cursor
-        self._wrapped_type: Type = Type(cursor.type)
+        self.type: Type = Type(cursor.type)
         self.name: str = cursor.spelling
-
-    @property
-    def type(self) -> Type:
-        return self._wrapped_type
 
     def __repr__(self) -> str:
         return "<xyz.cppmodel.Member {} {}>".format(self.type, self.name)
@@ -81,9 +67,8 @@ class FunctionArgument:
         return "<xyz.cppmodel.FunctionArgument {} {}>".format(self.type, self.name)
 
 
-class _Function(_CursorMirror):
-    def __init__(self, cursor: Cursor):
-        self._cursor = cursor
+class _Function:
+    def __init__(self, cursor):
         self.name: str = cursor.spelling
         arguments: List[Optional[str]] = [str(x.spelling) or None for x in cursor.get_arguments()]
         argument_types: List[Type] = [Type(x) for x in cursor.type.argument_types()]
@@ -113,7 +98,7 @@ class _Function(_CursorMirror):
 
 
 class Function(_Function):
-    def __init__(self, cursor: Cursor, namespaces: list[str] | None = None):
+    def __init__(self, cursor, namespaces: list[str] | None = None):
         namespaces = namespaces or []
         _Function.__init__(self, cursor)
         self.namespace: str = "::".join(namespaces)
@@ -128,7 +113,7 @@ class Function(_Function):
     def __repr__(self) -> str:
         return self.__str__()
 
-    def __eq__(self, f: Any) -> bool:
+    def __eq__(self, f) -> bool:
         if self.name != f.name:
             return False
         if self.namespace != f.namespace:
@@ -142,40 +127,20 @@ class Function(_Function):
 
 
 class Method(_Function):
-    def __init__(self, cursor: Cursor):
+    def __init__(self, cursor):
         _Function.__init__(self, cursor)
+        self.is_const: bool = cursor.is_const_method()
+        self.is_virtual: bool = cursor.is_virtual_method()
+        self.is_pure_virtual: bool = cursor.is_pure_virtual_method()
         self.is_public: bool = cursor.access_specifier == AccessSpecifier.PUBLIC
-
-    @property
-    def is_const(self) -> bool:
-        import warnings
-
-        warnings.warn("is_const is deprecated, use is_const_method() instead", DeprecationWarning, stacklevel=2)
-        return self.is_const_method()
-
-    @property
-    def is_virtual(self) -> bool:
-        import warnings
-
-        warnings.warn("is_virtual is deprecated, use is_virtual_method() instead", DeprecationWarning, stacklevel=2)
-        return self.is_virtual_method()
-
-    @property
-    def is_pure_virtual(self) -> bool:
-        import warnings
-
-        warnings.warn(
-            "is_pure_virtual is deprecated, use is_pure_virtual_method() instead", DeprecationWarning, stacklevel=2
-        )
-        return self.is_pure_virtual_method()
 
     def __str__(self) -> str:
         s = _Function.__str__(self)
-        if self.is_const_method():
+        if self.is_const:
             s = "{} const".format(s)
-        if self.is_pure_virtual_method():
+        if self.is_pure_virtual:
             s = "virtual {} = 0".format(s)
-        elif self.is_virtual_method():
+        elif self.is_virtual:
             s = "virtual {}".format(s)
         return "<xyz.cppmodel.Method {}>".format(s)
 
@@ -183,9 +148,8 @@ class Method(_Function):
         return self.__str__()
 
 
-class Class(_CursorMirror):
+class Class:
     def __init__(self, cursor: Cursor, namespaces: List[str]):
-        self._cursor = cursor
         self.name: str = cursor.spelling
         self.namespace: str = "::".join(namespaces)
         self.qualified_name: str = self.name
