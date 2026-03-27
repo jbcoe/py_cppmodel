@@ -1,3 +1,4 @@
+import warnings
 from typing import Any
 from typing import List
 from typing import Optional
@@ -47,8 +48,6 @@ class Type(_TypeMirror):
 
     @property
     def is_const(self) -> bool:
-        import warnings
-
         warnings.warn("is_const is deprecated, use is_const_qualified() instead", DeprecationWarning, stacklevel=2)
         return self.is_const_qualified()
 
@@ -148,22 +147,16 @@ class Method(_Function):
 
     @property
     def is_const(self) -> bool:
-        import warnings
-
         warnings.warn("is_const is deprecated, use is_const_method() instead", DeprecationWarning, stacklevel=2)
         return self.is_const_method()
 
     @property
     def is_virtual(self) -> bool:
-        import warnings
-
         warnings.warn("is_virtual is deprecated, use is_virtual_method() instead", DeprecationWarning, stacklevel=2)
         return self.is_virtual_method()
 
     @property
     def is_pure_virtual(self) -> bool:
-        import warnings
-
         warnings.warn(
             "is_pure_virtual is deprecated, use is_pure_virtual_method() instead", DeprecationWarning, stacklevel=2
         )
