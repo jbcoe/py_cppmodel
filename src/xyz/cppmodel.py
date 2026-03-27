@@ -76,7 +76,7 @@ class _Function:
         self.return_type: Type = Type(cursor.type.get_result())
         self.arguments: List[FunctionArgument] = []
         self.annotations: List[str] = _get_annotations(cursor)
-        self.is_constexpr: bool = "constexpr " in [t.spelling for t in cursor.get_tokens()]
+        self.is_constexpr: bool = "constexpr" in [t.spelling for t in cursor.get_tokens()]
 
         for t, n in zip(argument_types, arguments, strict=False):
             self.arguments.append(FunctionArgument(t, n))

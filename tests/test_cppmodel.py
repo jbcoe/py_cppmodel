@@ -86,5 +86,5 @@ def test_unmodelled_nodes(model):
     )
     assert (
         str(model.unmodelled_nodes[1])
-        == "<xyz.cppmodel.Unmodelled B<T> <SourceLocation file 'sample.cc', line 12, column 7>>"
+        == "<xyz.cppmodel.Unmodelled B<T> <SourceLocation file 'sample.cc', line 13, column 7>>"
     )
