@@ -50,6 +50,7 @@ class _CursorMirror:
     def kind(self) -> Any:
         return self._cursor.kind
 
+    @property
     def enum_type(self) -> Any:
         return self._cursor.enum_type
 
