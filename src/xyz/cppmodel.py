@@ -76,19 +76,25 @@ class _Function:
         self.return_type: Type = Type(cursor.type.get_result())
         self.arguments: List[FunctionArgument] = []
         self.annotations: List[str] = _get_annotations(cursor)
+        self.is_constexpr: bool = "constexpr" in [t.spelling for t in cursor.get_tokens()]
 
         for t, n in zip(argument_types, arguments, strict=False):
             self.arguments.append(FunctionArgument(t, n))
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         r = "{} {}({})".format(
             self.return_type.name,
             str(self.name),
             ", ".join([a.type.name for a in self.arguments]),
         )
+        if self.is_constexpr:
+            r = "constexpr " + r
         if self.is_noexcept:
             r = r + " noexcept"
         return r
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Function(_Function):
@@ -100,9 +106,12 @@ class Function(_Function):
         if self.namespace:
             self.qualified_name = "::".join([self.namespace, self.name])
 
-    def __repr__(self) -> str:
-        s = _Function.__repr__(self)
+    def __str__(self) -> str:
+        s = _Function.__str__(self)
         return "<xyz.cppmodel.Function {}>".format(s)
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
     def __eq__(self, f) -> bool:
         if self.name != f.name:
@@ -125,8 +134,8 @@ class Method(_Function):
         self.is_pure_virtual: bool = cursor.is_pure_virtual_method()
         self.is_public: bool = cursor.access_specifier == AccessSpecifier.PUBLIC
 
-    def __repr__(self) -> str:
-        s = _Function.__repr__(self)
+    def __str__(self) -> str:
+        s = _Function.__str__(self)
         if self.is_const:
             s = "{} const".format(s)
         if self.is_pure_virtual:
@@ -134,6 +143,9 @@ class Method(_Function):
         elif self.is_virtual:
             s = "virtual {}".format(s)
         return "<xyz.cppmodel.Method {}>".format(s)
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class Class:
